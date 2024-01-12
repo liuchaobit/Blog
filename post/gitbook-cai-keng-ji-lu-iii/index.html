@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Gitbook踩坑记录III | ChaosTech</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://www.liuchaos.cn/Blog//favicon.ico?v=1705046022343">
+<link rel="stylesheet" href="https://www.liuchaos.cn/Blog//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115775953-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-115775953-1');
+</script>
+
+
+    <meta name="description" content="除了上述问题外，还有几个坑。
+7、Mathjax error
+info: loading plugin &quot;mathjax&quot;... ERROR
+
+PluginError: Error with plugin &quot;m..." />
+    <meta name="keywords" content="Gitbook,Markdown" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://www.liuchaos.cn/Blog/">
+        <img src="https://www.liuchaos.cn/Blog//images/avatar.png?v=1705046022343" class="site-logo">
+        <h1 class="site-title">ChaosTech</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/Blog/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/Blog/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/Blog/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/liuchaobit/Blog" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+          <a class="social-link" href="https://www.zhihu.com/people/tensors" target="_blank">
+            <i class="fab fa-zhihu"></i>
+          </a>
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      一枚小学生的作文
+    </div>
+    <div class="site-footer">
+      Powered by <a href="http://www.liuchaos.cn/" target="_blank">Chaos</a> | <a class="rss" href="https://www.liuchaos.cn/Blog//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Gitbook踩坑记录III</h2>
+            <div class="post-date">2020-04-06</div>
+            
+            <div class="post-content" v-pre>
+              <p>除了上述问题外，还有几个坑。</p>
+<h2 id="7-mathjax-error">7、Mathjax error</h2>
+<pre><code>info: loading plugin &quot;mathjax&quot;... ERROR
+
+PluginError: Error with plugin &quot;mathjax&quot;: Cannot find module 'mathjax/unpacked/MathJax'
+</code></pre>
+<p>在生成pdf或者生成网页时，mathjax会报错，一般出现在新安装mathjax或者更新mathjax后，解决办法为,为mathjax降级，安装 2.7.6版本<br>
+npm install mathjax@2.7.6</p>
+<h2 id="8-speechprocessexpression-is-not-a-function">8、speech.processExpression is not a function</h2>
+<pre><code>Error: TypeError: speech.processExpression is not a function
+</code></pre>
+<p>在生成pdf时，会出现这种错误，这时候在 node_modules/mathjax-node/lib/mj-single.js中第540行，将 &quot;processExpression&quot; 改为&quot;toSpeech&quot;可破。</p>
+<h2 id="9-error-while-generating-page">9、 error while generating page</h2>
+<pre><code>  error：error while generating page
+</code></pre>
+<p>在生成pdf过程中，如果确保svgexport命令可运行的情况下，出现该错误，则需要重新安装svgexport，记得加-g<br>
+npm install svgexport@0.3.2 -g</p>
+<h2 id="10-pdf中公式模糊">10、pdf中公式模糊</h2>
+<p>gitbook-pdf似乎对公式支持不太好，如果latex语法规范，可以将mathjax插件换成katex。如果提示katex不能识别公式里的某些符号，只能使用mathjax。此时可以在svgexport文件夹中修改。<br>
+注意，svgexport安装如果是全局安装，就需要到npm默认文件夹修改，比如我的在：<br>
+C:\Users\Administrator\AppData\Roaming\npm\node_modules\svgexport<br>
+在render.js中，根据需要修改153-156行，虽然修改后仍然不太清晰，但是比之前好一些。</p>
+<h2 id="11-代码块-表格超出页面">11、代码块、表格超出页面</h2>
+<p>注意修改book.json中关于pdf属性frontsize相关内容。</p>
+<p>大部分的坑都在这里了，另外可以利用html转pdf，github上有一个gitbook2pdf和一个docker for gitbook2pdf的项目，可以尝试。</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://www.liuchaos.cn/Blog/tag/tDAw6zBB5/" class="tag">
+                    Gitbook
+                  </a>
+                
+                  <a href="https://www.liuchaos.cn/Blog/tag/FFdD4RkXt/" class="tag">
+                    Markdown
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://www.liuchaos.cn/Blog/post/gitbook-cai-keng-ji-lu-ii/">
+                  <h3 class="post-title">
+                    Gitbook踩坑记录II
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '800e66e8f906ee9f7c2b',
+        clientSecret: '665d8e475f81ea42b8ebc33d055999605f24ed71',
+        repo: 'Gitalk_blog',
+        owner: 'liuchaobit',
+        admin: ['liuchaobit'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

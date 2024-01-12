@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Gitbook踩坑记录II | ChaosTech</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://www.liuchaos.cn/Blog//favicon.ico?v=1705046022343">
+<link rel="stylesheet" href="https://www.liuchaos.cn/Blog//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-115775953-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-115775953-1');
+</script>
+
+
+    <meta name="description" content="接《Gitbook踩坑记录I》
+现在可以在localhost:4000/查看自己的网页了。而且生成的网页存在_book文件夹中，下次点击 _book文件夹中的index.html就能打开网页，内容无更新，就不需要再次生成。生成的网页也可以传..." />
+    <meta name="keywords" content="Gitbook,Markdown" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://www.liuchaos.cn/Blog/">
+        <img src="https://www.liuchaos.cn/Blog//images/avatar.png?v=1705046022343" class="site-logo">
+        <h1 class="site-title">ChaosTech</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/Blog/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/Blog/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/Blog/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/liuchaobit/Blog" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+          <a class="social-link" href="https://www.zhihu.com/people/tensors" target="_blank">
+            <i class="fab fa-zhihu"></i>
+          </a>
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      一枚小学生的作文
+    </div>
+    <div class="site-footer">
+      Powered by <a href="http://www.liuchaos.cn/" target="_blank">Chaos</a> | <a class="rss" href="https://www.liuchaos.cn/Blog//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Gitbook踩坑记录II</h2>
+            <div class="post-date">2020-04-06</div>
+            
+            <div class="post-content" v-pre>
+              <p>接《Gitbook踩坑记录I》</p>
+<p>现在可以在localhost:4000/查看自己的网页了。而且生成的网页存在_book文件夹中，下次点击 _book文件夹中的index.html就能打开网页，内容无更新，就不需要再次生成。生成的网页也可以传到自己的服务器或者github-pages作为静态网站。</p>
+<h2 id="4-左侧导航栏超链接无法跳转">4、左侧导航栏超链接无法跳转</h2>
+<p>gitbook生成的静态网页很像wiki，左侧有电子书的导航栏，很方便。但是，点击链接居然不会跳转。不会跳转的超链接能叫超链接吗？</p>
+<p>此时，在_book文件夹内，找到gitbook文件夹，在里面找到theme.js<br>
+打开，用文本搜索工具搜索查找</p>
+<pre><code>if(m)for(n.handler&amp;&amp;
+</code></pre>
+<p>注意，文本时压缩过的，不要搜索if(m)，那样找不到。<br>
+找到后，将 if(m)改成if(false)<br>
+再次打开_book下的网页，左侧导航栏超级链接就可以正常跳转了。</p>
+<h2 id="5-error-converting-svg-into-png">5、Error converting .svg into .png</h2>
+<p>在后来尝试使用gitbook生成pdf时，又遇到一个问题</p>
+<pre><code>error: error while generating page &quot;chapter1/14.md&quot;:
+Error: Error converting C:\Users\Administrator\AppData\Local\Temp\tmp-47768poGb4f1fkPK_mathjax_46d8639.svg into C:\Users\Administrator\AppData\Local\Temp\tmp-47768poGb4f1fkPK\c6231af5.png
+</code></pre>
+<p>看样子是在生成pdf时，需要把mathjax公式svg图转换为png。刚开始以为是mathjax的问题，换了很多歌mathjax插件版本，后来发现把插件换成katex也有一样的错误提示。<br>
+于是想到了可能是svg转png的过程出现问题，于是找到了svgexport 。<br>
+svgexport 是一个svg转png的工具，现在版本是0.4.0<br>
+搜了一下，发现有一些人遇到同样的问题（不仅限于在gitbook），但是大家都有一个个特点：那就是都使用windows，<br>
+于是我用svgexport 测试了一下单独的svg图片，发现也是载入报错。<br>
+后来在svgexport 的github的issue里发现问题，svgfile在读取windows下的文件时会有文件地址错误的问题，具体就是window和Linux中文件路径的表示方法是不一样造成的。<br>
+该问题目前暂时无解，工具的作者已经提交issue，准备修复这个bug了。<br>
+但是，在此之前，可以使用0.3.2版本的svgexport，就可以完美滴解决这个问题。</p>
+<h2 id="6-gitbook网页版生成pdf">6、gitbook网页版生成pdf</h2>
+<p>昨天登上gitbook网页版看了一下，多了一个导出pdf的功能，试用了一下，真香。生成的pdf和网页显示一模一样，只是没有书签导航页。<br>
+不过这个功能是business feature, 39美金一个月，土豪专享。<br>
+现在每个账号可以试用14天。</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://www.liuchaos.cn/Blog/tag/tDAw6zBB5/" class="tag">
+                    Gitbook
+                  </a>
+                
+                  <a href="https://www.liuchaos.cn/Blog/tag/FFdD4RkXt/" class="tag">
+                    Markdown
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://www.liuchaos.cn/Blog/post/gitbook-cai-keng-ji-lu-i/">
+                  <h3 class="post-title">
+                    Gitbook踩坑记录I
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '800e66e8f906ee9f7c2b',
+        clientSecret: '665d8e475f81ea42b8ebc33d055999605f24ed71',
+        repo: 'Gitalk_blog',
+        owner: 'liuchaobit',
+        admin: ['liuchaobit'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
